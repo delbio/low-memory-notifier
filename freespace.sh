@@ -83,11 +83,17 @@ fi
 
 ## -- ESECUZIONE
 
-free_space=$(df -k | grep ${file_system_name} | awk '{print $4/1024}')
+free_space=$(df -k | grep ${file_system_name} | awk '{print $4}')
+
+free_space=$(( ${free_space} / 1024 ))
 
 if [ ${free_space} -le ${limite} ]
 then
   echo "spazio sotto la soglia, manda un email al gestore ..."
+	target=your.email@your.domain.com
+	subject="Spazio Residuo ${file_system_name}"
+	message="Attenzione spazio residuo in ${file_system_name} inferiore al limite: ${limite}MB"
+	echo "${message}" | mail -s "${subject}" ${target}
 else
   echo "spazio sotto controllo, chiudo."
 fi
