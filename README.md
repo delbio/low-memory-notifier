@@ -13,4 +13,5 @@ Usage
 ===============
 Momentaneamente inserite l'indirizzo del destinatario della mail alla riga 93 del file freespace.sh; prossimamente questo elemento sarà gestito attraverso un file di configurazione.
 Terminata la configurazione eseguite il seguente comando
+
     bash freespace.sh rootfs 512
