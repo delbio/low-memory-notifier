@@ -1,6 +1,6 @@
+#!/bin/bash
 
-# nel Mac le funzioni funzionano senza () non so se continuano a funzionare con le ()
-# ubuntu esegue questo script con bash e non con sh come mac
+set -e # exit on error
 
 function usages() {
     error_message=$1
@@ -55,6 +55,27 @@ function validateFileSystemName() {
     fi
 }
 
+function sendMailFromRecipientFile() {
+	recipient_file=${1}
+	
+	if [ ! -f $recipient_file ];
+	then
+		echo "Selected Recipient file: $recipient_file not found, mail not sent"
+		exit
+	fi	
+
+	while read email
+	do
+		target=$email
+
+		echo "Send mail to: $target"
+
+		subject="Spazio Residuo ${file_system_name}"
+		message="Attenzione spazio residuo in ${file_system_name} inferiore al limite: ${limite}MB"
+		echo "${message}" | mail -s "${subject}" ${target}
+	done < $recipient_file
+}
+
 file_system_name=""
 limite=3072
 
@@ -71,8 +92,8 @@ fi
 
 if [ -n "$2" ]
 then
-    echo "limite inferiore scelto: "${limite}" MB"
     limite=$2
+    echo "limite inferiore scelto: "${limite}" MB"
 else
     echo "limite non impostato, default: "${limite}" MB"
 fi
@@ -89,13 +110,14 @@ free_space=$(( ${free_space} / 1024 ))
 
 if [ ${free_space} -le ${limite} ]
 then
-  echo "spazio sotto la soglia, manda un email al gestore ..."
-	target=your.email@your.domain.com
-	subject="Spazio Residuo ${file_system_name}"
-	message="Attenzione spazio residuo in ${file_system_name} inferiore al limite: ${limite}MB"
-	echo "${message}" | mail -s "${subject}" ${target}
+	echo "spazio sotto la soglia ..."
+	if [ -n "$3" ];
+	then
+		echo "Send Mail from recipients"
+		sendMailFromRecipientFile $3
+	fi
 else
-  echo "spazio sotto controllo, chiudo."
+	echo "spazio sotto controllo, chiudo."
 fi
 
 
