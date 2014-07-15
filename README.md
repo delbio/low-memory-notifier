@@ -1,4 +1,4 @@
-memory-low-notifier
+Low Memory Notifier
 ===================
 
 Controlla periodicamente la memoria libera di una partizione, segnala via mail se la memoria residua e' inferiore alla soglia scelta.
