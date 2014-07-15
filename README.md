@@ -25,7 +25,7 @@ Il comando da eseguire cambierà in:
 	
 	bash freespace.sh rootfs 512 recipient
 
-Per automatizzare la rilevazione e la segnalazione, è possibile esegiore il segguente script, il quale inizializza un nuovo crontab:
+Per automatizzare la rilevazione e la segnalazione, è possibile eseguire il segguente script, il quale inizializza un nuovo crontab:
 
 	bash init_crontab.sh rootfs 3000 $(pwd)/recipient
 
